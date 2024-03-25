@@ -103,7 +103,7 @@ class TestHBNBCommand(unittest.TestCase):
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
 
-    @unittest.skipIf(isinstance(models.storage, DBStorage), "Testing DBStorage")
+    @unittest.skipIf(isinstance(models.storage, DBStorage))
     def test_create(self):
         """Test create command."""
         with patch("sys.stdout", new=StringIO()) as f:
