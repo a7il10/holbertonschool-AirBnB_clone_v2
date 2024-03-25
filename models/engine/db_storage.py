@@ -36,7 +36,6 @@ class DBStorage():
         """show all data"""
         if cls:
             objs = self.__session.query(cls).all()
-
         else:
             classes = [State, City, User, Place, Review, Amenity]
             objs = []
