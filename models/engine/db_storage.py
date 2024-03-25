@@ -13,6 +13,7 @@ from models.amenity import Amenity
 
 
 class DBStorage:
+    """ create tables in environmental"""
     __engine = None
     __session = None
 
@@ -22,46 +23,53 @@ class DBStorage:
         db = getenv("HBNB_MYSQL_DB")
         host = getenv("HBNB_MYSQL_HOST")
         env = getenv("HBNB_ENV")
+
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                                       .format(user, passwd, host, db),
                                       pool_pre_ping=True)
+
         if env == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """query on the current database session"""
-        db_sess = {}
+        """returns a dictionary"""
+        dic = {}
         if cls:
-            for obj in self.__session.query(cls):
-                key = "{}.{}".format(type(obj).__name__, obj.id)
-                db_sess[key] = obj
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
         else:
-            for obj in (State, City, User, Place, Review, Amenity):
-                for obj in self.__session.query(obj):
-                    key = "{}.{}".format(type(obj).__name__, obj.id)
-                    db_sess[key] = obj
-        return db_sess
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
-        """add the object to the current database session"""
+        """add a new element in the table"""
         self.__session.add(obj)
 
     def save(self):
-        """commit all changes of the current database session"""
+        """save changes"""
         self.__session.commit()
 
     def delete(self, obj=None):
-        """delete from the current database session obj if not None"""
+        """delete an element in the table"""
         if obj:
-            self.__session.delete(obj)
+            self.session.delete(obj)
 
     def reload(self):
-        """create all tables in the database"""
+        """configuration"""
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(session_factory)
+        sec = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(sec)
         self.__session = Session()
 
     def close(self):
-        """call remove() method on the private session attribute"""
-        self.__session.remove()
+        """ calls remove()"""
+        self.__session.close()
