@@ -2,6 +2,7 @@ import unittest
 from models.__init__ import storage
 from console import HBNBCommand
 
+
 class TestHBNBCommand(unittest.TestCase):
     def setUp(self):
         """Set up for the tests"""
@@ -13,29 +14,34 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_do_create(self):
         """Test the do_create method"""
-        # Add your test code here
+        result = self.console.do_create()
+        self.assertIsNotNone(result)
 
     def test_do_show(self):
         """Test the do_show method"""
-        # Add your test code here
+        result = self.console.do_show()
+        self.assertIsNotNone(result)
 
     def test_do_destroy(self):
         """Test the do_destroy method"""
-        # Add your test code here
+        result = self.console.do_destroy()
+        self.assertIsNotNone(result)
 
     def test_do_all(self):
         """Test the do_all method"""
-        # Add your test code here
+        result = self.console.do_all()
+        self.assertIsNotNone(result)
 
     def test_do_count(self):
         """Test the do_count method"""
-        # Add your test code here
+        result = self.console.do_count()
+        self.assertIsNotNone(result)
 
     def test_do_update(self):
         """Test the do_update method"""
-        # Add your test code here
+        result = self.console.do_update()
+        self.assertIsNotNone(result)
 
-    # Add more tests as needed
 
 if __name__ == "__main__":
     unittest.main()
