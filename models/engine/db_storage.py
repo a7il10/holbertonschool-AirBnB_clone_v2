@@ -24,16 +24,20 @@ class DBStorage():
         mysql_host = getenv('HBNB_MYSQL_HOST')
         mysql_db = getenv('HBNB_MYSQL_DB')
         mysql_env = getenv('HBNB_ENV')
+
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
             mysql_user, mysql_pwd, mysql_host, mysql_db), pool_pre_ping=True)
         Base.metadata.create_all(self.__engine)
+        
+        """DROP ALL TABLES"""
         if mysql_env == 'test':
             Base.metadata.drop_all(self.__engine)
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
 
     def all(self, cls=None):
-        """show all data"""
+        """show all data
+        """
         if cls:
             objs = self.__session.query(cls).all()
 
@@ -43,11 +47,13 @@ class DBStorage():
             for cls in classes:
                 objs += self.__session.query(cls)
 
+        """create and save data"""
         new_dict = {}
 
         for obj in objs:
             key = '{}.{}'.format(type(obj).__name__, obj.id)
             new_dict[key] = obj
+
         return new_dict
 
     def new(self, obj):
@@ -66,11 +72,13 @@ class DBStorage():
             self.__session.delete(obj)
 
     def close(self):
-        """Closes Session"""
+        """
+        Closes Session
+        """
         self.__session.close()
 
     def reload(self):
-        """Create database in Alchemy"""
+        """ Create database in Alchemy"""
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(Session)
