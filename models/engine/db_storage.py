@@ -29,7 +29,7 @@ class TestDBStorage(unittest.TestCase):
         Instantiate new DBStorage.
         Fill DBStorage test session with instances of all classes.
         """
-        if type(models.storage) == DBStorage:
+        if isinstance(models.storage) == DBStorage:
             cls.storage = DBStorage()
             Base.metadata.create_all(cls.storage._DBStorage__engine)
             Session = sessionmaker(bind=cls.storage._DBStorage__engine)
@@ -57,7 +57,7 @@ class TestDBStorage(unittest.TestCase):
         Delete all instantiated test classes.
         Clear DBStorage session.
         """
-        if type(models.storage) == DBStorage:
+        if isinstance(models.storage) == DBStorage:
             cls.storage._DBStorage__session.delete(cls.state)
             cls.storage._DBStorage__session.delete(cls.city)
             cls.storage._DBStorage__session.delete(cls.user)
