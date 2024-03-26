@@ -113,39 +113,41 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    def _key_value_parser(self, args):
+        """creates a dictionary from a list of strings"""
+        new_dict = {}
+        for arg in args:
+            if "=" in arg:
+                kvp = arg.split('=', 1)
+                key = kvp[0]
+                value = kvp[1]
+                if value[0] == value[-1] == '"':
+                    value = shlex.split(value)[0].replace('_', ' ')
+                else:
+                    try:
+                        value = int(value)
+                    except:
+                        try:
+                            value = float(value)
+                        except:
+                            continue
+                new_dict[key] = value
+        return new_dict
+
     def do_create(self, arg):
-        """ Create an object of any class with given parameters """
+        """Creates a new instance of a class"""
         args = arg.split()
-        if not args:
+        if len(args) == 0:
             print("** class name missing **")
-            return
-        elif args[0] not in HBNBCommand.classes:
+            return False
+        if args[0] in HBNBCommand.classes:
+            new_dict = self._key_value_parser(args[1:])
+            instance = HBNBCommand.classes[args[0]](**new_dict)
+        else:
             print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args[0]]()
-        for arg in args[1:]:
-            key_value = arg.split('=')
-            if len(key_value) != 2:
-                continue
-            key, value = key_value
-            if key not in vars(new_instance):
-                continue
-            if value[0] == '"' and value[-1] == '"':
-                value = value[1:-1].replace('_', ' ').replace('\\"', '"')
-            elif '.' in value:
-                try:
-                    value = float(value)
-                except ValueError:
-                    continue
-            else:
-                try:
-                    value = int(value)
-                except ValueError:
-                    continue
-            setattr(new_instance, key, value)
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+            return False
+        print(instance.id)
+        instance.save()
 
     def help_create(self):
         """ Help information for the create method """
