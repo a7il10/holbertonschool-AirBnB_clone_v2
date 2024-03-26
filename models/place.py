@@ -19,7 +19,7 @@ place_amenity = Table("place_amenity", Base.metadata,
                              primary_key=True,
                              nullable=False))
 
-Amenity = Table("amenities", Base.metadata,
+Amenity = Table("Amenity", Base.metadata,
                 Column("id", String(60), primary_key=True, nullable=False),
                 Column("name", String(128), nullable=False))
 
