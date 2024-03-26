@@ -29,23 +29,25 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         if mysql_env == 'test':
             Base.metadata.drop_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine)
-        self.__session = Session()
 
     def all(self, cls=None):
         """show all data"""
+        elem = {}
         if cls:
-            objs = self.__session.query(cls).all()
+            if type(cls) == str:
+                cls = eval(cls)
+            query = self.__session.query(cls).all()
+            for data in query:
+                key = "{}.{}".format(type(data).__name__, data.id)
+                elem[key] = data
         else:
-            classes = [State, City, User, Place, Review, Amenity]
-            objs = []
-            for cls in classes:
-                objs += self.__session.query(cls)
-        new_dict = {}
-        for obj in objs:
-            key = '{}.{}'.format(type(obj).__name__, obj.id)
-            new_dict[key] = obj
-        return new_dict
+            list_cls = [State, City, User, Place, Review, Amenity]
+            for clas in list_cls:
+                query = self.__session.query(clas).all()
+                for data in query:
+                    key = "{}.{}".format(type(data).__name__, data.id)
+                    elem[key] = data
+        return elem
 
     def new(self, obj):
         """Add the object in the databse"""
@@ -69,9 +71,9 @@ class DBStorage:
     def reload(self):
         """Create database in Alchemy"""
         Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(Session)
-        self.__session = Session
+        db_fac = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(db_fac)
+        self.__session = Session()
 
     def close(self):
         """Clise session"""
