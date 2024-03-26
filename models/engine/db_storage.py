@@ -66,6 +66,9 @@ class DBStorage():
 
     def reload(self):
         """Create database in Alchemy"""
+        if self.__session and self.__session.dirty:
+            self.__session.commit()
+
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(Session)
