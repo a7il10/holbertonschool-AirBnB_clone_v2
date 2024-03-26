@@ -8,7 +8,9 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-import shlex
+
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
 
 
 class FileStorage:
@@ -19,17 +21,13 @@ class FileStorage:
 
     def all(self, cls=None):
         """returns a dictionary"""
-        dict_cls = {}
-        if cls:
-            curr_dict = self.__objects
-            for key in curr_dict:
-                partition = key.replace('.', ' ')
-                partition = shlex.split(partition)
-                if partition[0] == cls.__name__:
-                    dict_cls[key] = curr_dict[key]
-            return dict_cls
-        else:
-            return self.__objects
+        if cls is not None:
+            new_dict = {}
+            for key, value in self.__objects.items():
+                if cls == value.__class__ or cls == value.__class__.__name__:
+                    new_dict[key] = value
+            return new_dict
+        return self.__objects
 
     def new(self, obj):
         """sets __object to given obj"""
