@@ -12,7 +12,7 @@ from models.place import Place
 from models.review import Review
 
 
-class DBStorage():
+class DBStorage:
     """DBStorage class"""
     __engine = None
     __session = None
