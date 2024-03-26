@@ -49,7 +49,8 @@ class DBStorage():
 
     def new(self, obj):
         """Add the object in the databse"""
-        self.__session.add(obj)
+        if obj:
+            self.__session.add(obj)
 
     def save(self):
         """Commit all changes of the current
@@ -58,7 +59,8 @@ class DBStorage():
 
     def delete(self, obj=None):
         """Delete from the current database"""
-        self.__session.delete(obj)
+        if obj:
+            self.__session.delete(obj)
 
     def close(self):
         """Closes Session"""
@@ -66,9 +68,6 @@ class DBStorage():
 
     def reload(self):
         """Create database in Alchemy"""
-        if self.__session and self.__session.dirty:
-            self.__session.commit()
-
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(Session)
