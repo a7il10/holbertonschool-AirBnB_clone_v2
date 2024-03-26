@@ -47,7 +47,7 @@ class DBStorage:
                 for data in query:
                     key = "{}.{}".format(type(data).__name__, data.id)
                     elem_dict[key] = data
-        return (elem_dict)
+        return elem_dict
 
     def new(self, obj):
         """Add the object in the databse"""
