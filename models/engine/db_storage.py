@@ -34,16 +34,18 @@ class DBStorage():
 
     def all(self, cls=None):
         """show all data"""
-        if cls:
-            objs = self.__session.query(cls).all()
+        if cls is None:
+            objs = self.__session.query(User).all()
+            objs += self.__session.query(State).all()
+            objs += self.__session.query(City).all()
+            objs += self.__session.query(Amenity).all()
+            objs += self.__session.query(Place).all()
+            objs += self.__session.query(Review).all()
         else:
-            classes = [State, City, User, Place, Review, Amenity]
-            objs = []
-            for cls in classes:
-                objs += self.__session.query(cls)
+            objs = self.__session.query(cls).all()
         new_dict = {}
         for obj in objs:
-            key = '{}.{}'.format(type(obj).__name__, obj.id)
+            key = obj.__class__.__name__ + '.' + obj.id
             new_dict[key] = obj
         return new_dict
 
