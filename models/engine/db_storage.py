@@ -29,6 +29,8 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         if mysql_env == 'test':
             Base.metadata.drop_all(self.__engine)
+        Session = sessionmaker(bind=self.__engine)
+        self.__session = Session()
 
     def all(self, cls=None):
         """show all data"""
@@ -36,14 +38,14 @@ class DBStorage:
         if cls:
             if type(cls) is str:
                 cls = eval(cls)
-            query = self.__session.query(cls).all()
+            query = Session().query(cls).all()
             for data in query:
                 key = "{}.{}".format(type(data).__name__, data.id)
                 elem_dict[key] = data
         else:
             list_cls = [State, City, User, Place, Review, Amenity]
             for clas in list_cls:
-                query = self.__session.query(clas)
+                query = Session().query(clas)
                 for data in query:
                     key = "{}.{}".format(type(data).__name__, data.id)
                     elem_dict[key] = data
