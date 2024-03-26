@@ -19,9 +19,6 @@ place_amenity = Table("place_amenity", Base.metadata,
                              primary_key=True,
                              nullable=False))
 
-Amenity = Table("Amenity", Base.metadata,
-                Column("id", String(60), primary_key=True, nullable=False),
-                Column("name", String(128), nullable=False))
 
 class Place(BaseModel, Base):
     """This is the class for Place"""
@@ -72,3 +69,6 @@ class Place(BaseModel, Base):
             """ Appends amenity ids to the attribute """
             if obj.__class__.__name__ == "Amenity":
                 self.amenity_ids.append(obj.id)
+
+amenity = Table("amenity", Base.metadata,
+                Column("name", String(128), nullable=False))
