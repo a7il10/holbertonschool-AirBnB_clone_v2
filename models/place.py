@@ -19,7 +19,9 @@ place_amenity = Table("place_amenity", Base.metadata,
                              primary_key=True,
                              nullable=False))
 
-Amenity = models.amenity.Amenity
+Amenity = Table("amenities", Base.metadata,
+                Column("id", String(60), primary_key=True, nullable=False),
+                Column("name", String(128), nullable=False))
 
 class Place(BaseModel, Base):
     """This is the class for Place"""
