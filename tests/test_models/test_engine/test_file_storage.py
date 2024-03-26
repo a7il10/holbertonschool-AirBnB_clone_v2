@@ -110,24 +110,105 @@ class test_fileStorage(unittest.TestCase):
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
 
-    def test_email_attr(self):
-        """ Email attribute is added to User """
-        from models.user import User
-        new = User()
-        new.email = "test"
-        new.save()
-        temp = storage.all()
-        for obj in temp.values():
-            loaded = obj
-        self.assertEqual(new.email, loaded.email)
+    def test_get(self):
+        """ Test get method """
+        new = BaseModel()
+        _id = new.to_dict()['id']
+        self.assertEqual(new, storage.get('BaseModel', _id))
 
-    def test_first_name_attr(self):
-        """ First name attribute is added to User """
-        from models.user import User
-        new = User()
-        new.first_name = "test"
-        new.save()
-        temp = storage.all()
-        for obj in temp.values():
-            loaded = obj
-        self.assertEqual(new.first_name, loaded.first_name)
+    def test_count(self):
+        """ Test count method """
+        num = storage.count()
+        new = BaseModel()
+        if num == 0:
+            self.assertEqual(storage.count(), 1)
+        else:
+            self.assertEqual(storage.count(), num + 1)
+
+    def test_count_cls(self):
+        """ Test count method with class specified """
+        num = storage.count()
+        new = BaseModel()
+        if num == 0:
+            self.assertEqual(storage.count('BaseModel'), 1)
+        else:
+            self.assertEqual(storage.count('BaseModel'), num + 1)
+
+    def test_count_fake_cls(self):
+        """ Test count method with fake class """
+        self.assertEqual(storage.count('MyModel'), 0)
+
+    def test_get_none(self):
+        """ Test get method with None """
+        self.assertEqual(storage.get(None, None), None)
+
+    def test_count_none(self):
+        """ Test count method with None """
+        self.assertEqual(storage.count(None), 0)
+
+    def test_count_fake_id(self):
+        """ Test count method with fake id """
+        self.assertEqual(storage.count('BaseModel', 'fake_id'), 0)
+
+    def test_get_fake_id(self):
+        """ Test get method with fake id """
+        self.assertEqual(storage.get('BaseModel', 'fake_id'), None)
+
+    def test_get_fake_cls(self):
+        """ Test get method with fake class """
+        self.assertEqual(storage.get('MyModel', 'fake_id'), None)
+
+    def test_count_new_cls(self):
+        """ Test count method with new class """
+        new = BaseModel()
+        self.assertEqual(storage.count('MyModel'), 0)
+
+    def test_get_new_cls(self):
+        """ Test get method with new class """
+        new = BaseModel()
+        self.assertEqual(storage.get('MyModel', new.id), None)
+
+    def test_count_new_id(self):
+        """ Test count method with new id """
+        new = BaseModel()
+        self.assertEqual(storage.count('BaseModel', 'new_id'), 0)
+
+    def test_get_new_id(self):
+        """ Test get method with new id """
+        new = BaseModel()
+        self.assertEqual(storage.get('BaseModel', 'new_id'), None)
+
+    def test_count_new_cls_id(self):
+        """ Test count method with new class and id """
+        new = BaseModel()
+        self.assertEqual(storage.count('MyModel', 'new_id'), 0)
+
+    def test_get_new_cls_id(self):
+        """ Test get method with new class and id """
+        new = BaseModel()
+        self.assertEqual(storage.get('MyModel', 'new_id'), None)
+
+    def test_count_new_cls_fake_id(self):
+        """ Test count method with new class and fake id """
+        new = BaseModel()
+        self.assertEqual(storage.count('MyModel', 'fake_id'), 0)
+
+    def test_get_new_cls_fake_id(self):
+        """ Test get method with new class and fake id """
+        new = BaseModel()
+        self.assertEqual(storage.get('MyModel', 'fake_id'), None)
+
+    def test_count_fake_cls_new_id(self):
+        """ Test count method with fake class and new id """
+        new = BaseModel()
+        self.assertEqual(storage.count('MyModel', new.id), 0)
+
+    def test_get_fake_cls_new_id(self):
+        """ Test get method with fake class and new id """
+        new = BaseModel()
+        self.assertEqual(storage.get('MyModel', new.id), None)
+
+    def test_count_fake_cls_fake_id(self):
+        """ Test count method with fake class and fake id """
+        new = BaseModel()
+        self.assertEqual(storage.count('MyModel', 'fake_id'), 0)
