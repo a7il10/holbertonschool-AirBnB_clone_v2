@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Review class definitiont """
+"""Review class definitiont"""
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey, Float

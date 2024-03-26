@@ -1,5 +1,5 @@
- #!/usr/bin/python3
-""" State Module for HBNB project """
+#!/usr/bin/python3
+"""State class definitiont"""
 import models
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String
@@ -16,10 +16,10 @@ class State(BaseModel, Base):
         cities = relationship("City", cascade="all, delete", backref="state")
     else:
         name = ""
+
         @property
         def cities(self):
-            """ Returns the list of City
-            """
+            """ Returns the list of City"""
             the_cities = []
             for c in models.storage.all(City).values():
                 if c.state_id == self.id:
