@@ -10,7 +10,6 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-import argparse
 
 
 class DBStorage:
@@ -79,14 +78,3 @@ class DBStorage:
     def close(self):
         """Clise session"""
         self.__session.close()
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('class_name', choices=['State', 'City', 'User', 'Place', 'Review', 'Amenity'], help='The name of the class to fetch data for')
-    args = parser.parse_args()
-
-    db = DBStorage()
-    data = db.all(args.class_name)
-
-    for key, value in data.items():
-        print(f'{key}: {value}')
