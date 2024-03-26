@@ -109,3 +109,25 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+
+    def test_email_attr(self):
+        """ Email attribute is added to User """
+        from models.user import User
+        new = User()
+        new.email = "test"
+        new.save()
+        temp = storage.all()
+        for obj in temp.values():
+            loaded = obj
+        self.assertEqual(new.email, loaded.email)
+
+    def test_first_name_attr(self):
+        """ First name attribute is added to User """
+        from models.user import User
+        new = User()
+        new.first_name = "test"
+        new.save()
+        temp = storage.all()
+        for obj in temp.values():
+            loaded = obj
+        self.assertEqual(new.first_name, loaded.first_name)
