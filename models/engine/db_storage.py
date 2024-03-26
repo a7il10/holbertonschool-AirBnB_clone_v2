@@ -32,22 +32,22 @@ class DBStorage:
 
     def all(self, cls=None):
         """show all data"""
-        elem = {}
+        elem_dict = {}
         if cls:
-            if type(cls) == str:
+            if type(cls) is str:
                 cls = eval(cls)
-            query = self.session.query(cls).all()
+            query = self.__session.query(cls).all()
             for data in query:
                 key = "{}.{}".format(type(data).__name__, data.id)
-                elem[key] = data
+                elem_dict[key] = data
         else:
             list_cls = [State, City, User, Place, Review, Amenity]
             for clas in list_cls:
-                query = self.session.query(clas).all()
+                query = self.__session.query(clas)
                 for data in query:
                     key = "{}.{}".format(type(data).__name__, data.id)
-                    elem[key] = data
-        return elem
+                    elem_dict[key] = data
+        return elem_dict
 
     def new(self, obj):
         """Add the object in the databse"""
