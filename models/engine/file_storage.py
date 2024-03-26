@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """This is the file storage class for AirBnB"""
-import models
 import json
 from models.base_model import BaseModel
 from models.user import User
@@ -9,6 +8,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+import shlex
 
 
 class FileStorage:
@@ -19,15 +19,17 @@ class FileStorage:
 
     def all(self, cls=None):
         """returns a dictionary"""
-        if cls is None:
-            return self.__objects
+        dict_cls = {}
+        if cls:
+            curr_dict = self.__objects
+            for key in curr_dict:
+                partition = key.replace('.', ' ')
+                partition = shlex.split(partition)
+                if partition[0] == cls.__name__:
+                    dict_cls[key] = curr_dict[key]
+            return dict_cls
         else:
-            my_dict = {}
-            for key in self.__objects:
-                name = key.split('.')
-                if name[0] == cls.__name__:
-                    my_dict[key] = self.__objects[key]
-            return my_dict
+            return self.__objects
 
     def new(self, obj):
         """sets __object to given obj"""
@@ -56,8 +58,8 @@ class FileStorage:
     def delete(self, obj=None):
         """ delete obj from __objects """
         if obj:
-            del self.__objects[obj.__class__.__name__ + '.' + obj.id]
-            self.save()
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+            del self.__objects[key]
 
     def close(self):
         """Method for deserializing"""
