@@ -31,7 +31,7 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """show all data"""
+        """show all data."""
         elem_dict = {}
         if cls:
             if type(cls) is str:
