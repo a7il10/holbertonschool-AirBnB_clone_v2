@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Anenity class definition """
+""" Anenity class """
 from models.base_model import BaseModel, Base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String
